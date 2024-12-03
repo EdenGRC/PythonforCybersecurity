@@ -7,8 +7,8 @@ from passlib.hash import sha512_crypt
 #File paths
 
 shadowFile = r"C:\Users\piegu\OneDrive\Documents\GitHub\PythonforCybersecurity\start\CH06\shadow" 
-
-PasswordFile = r"C:\Users\piegu\OneDrive\Documents\GitHub\PythonforCybersecurity\start\CH06\Top1000FromGoogle.txt"
+PasswordFile = r"C:\Users\piegu\OneDrive\Documents\GitHub\PythonforCybersecurity\start\CH06\10-million-password-list-top-10000.txt"
+CrackedPasswords = r"C:\Users\piegu\OneDrive\Documents\GitHub\PythonforCybersecurity\start\CH06\CrackedPasswords.txt"
 
 #Create a function  to guess our password.
 
