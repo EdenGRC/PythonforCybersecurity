@@ -17,7 +17,7 @@ def GuessPassword(ShadowFile, PasswordFile):
 
     with open(ShadowFile, 'r') as sf, open(PasswordFile, 'r') as pf:
         shadows = sf.readlines()
-        passwords = pf.readlines()
+        passwords = pf.readlines() 
 
         for shadow in shadows:
             #Split once and unpack usernae and password bash.
