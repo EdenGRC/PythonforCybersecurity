@@ -1,12 +1,12 @@
-#the four library
+# The four library
 import hashlib
 import requests
 import secrets
 import string
 
-# function that generates a password
+# Function that generates a password
 
-def generate_password(length=12, use_upper=True, use_lower=True, use_digits=True, use_specieal=True):
+def generate_password(length=12, use_upper=True, use_lower=True, use_digits=True, use_special=True):
     characters = ""
     if use_upper:
         characters += string.ascii_uppercase #adds upper case letters A-Z
@@ -14,20 +14,26 @@ def generate_password(length=12, use_upper=True, use_lower=True, use_digits=True
         characters += string.ascii_lowercase #adds lower case letters a-z
     if use_digits:
         characters += string.digits #adds digits 0-9
-    if use_specieal:
+    if use_special:
         characters += "!@#$%^&*(){}[]:;<>,.?/`~" #adds special characters
     
     if not characters:
         raise ValueError("No character sets selected for password generator.")
      
     return ''.join(secrets.choice(characters) for _ in range (length))
+
+# Function that generates the password in with hyphens because I like that format
+def generate_password_with_hyphens(length=12, use_upper=True, use_lower=True, use_digits=True, use_special=True):
+    password = generate_password(length, use_upper, use_lower, use_digits, use_special)
+    password_with_hyphens = '-'.join(password[i:i+4] for i in range(0, len(password), 4))
+    return password_with_hyphens
     
 # Function that checks the password with the haveibeenpwned API
 
-def check_password_pwned(password):
-    sha1_hash = hashlib.sha1(password.encode('usf-8')).hexdigest().upper()
+def check_password_pwned(password_with_hyphens):
+    sha1_hash = hashlib.sha1(password_with_hyphens.encode('utf-8')).hexdigest().upper()
     prefix = sha1_hash[:5]
-    suffix = sha1_hash[:5]
+    suffix = sha1_hash[5:]
    
     url = f"https://api.pwnedpasswords.com/range/{prefix}"
     response = requests.get(url)
@@ -44,23 +50,23 @@ def check_password_pwned(password):
         
     return 0 # Password not found in the database.
 
+# Function to save passwords to a file
 
+def save_password(password, filename="saved_passwords.txt"):
+    with open(filename, "a") as file:
+        file.write(password + "\n")
+    print(f"Password saved to {filename}")
 
-#generate the password
+# Generate the password
 
-password = generate_password(length=12, use_upper=True, use_lower=True, use_digits=True, use_specieal=True)
+password = generate_password_with_hyphens(length=12, use_upper=True, use_lower=True, use_digits=True, use_special=True)
 print(f"This is the new password: {password}")
 
-# if password is breached
+# Checks if password is breached
+
 breaches = check_password_pwned(password)
 if breaches > 0:
-    print(f"Warning: the generated password has been found in {breaches} please use another password.")
+    print(f"Warning: the generated password has been found in {breaches} breaches, please use another password.")
 else:
-    print(f"This password is unique and can be used safely.")
-
-
-#Things to do
-
-# Create stored passwords like a mini password manager
-#Create an input from user about there password to the query the API to see if its compromised
-#Emails and utilizes that aspect of api to query if has appeard in any breach.
+    print(f"This password has been found in {breaches} breaches, it is unique and can be used safely.")
+    save_password(password)
