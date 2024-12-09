@@ -29,7 +29,7 @@ def check_password_pwned(password):
     prefix = sha1_hash[:5]
     suffix = sha1_hash[:5]
    
-    url = f"https://api.pwnedpasswords.com/range/{preifx}"
+    url = f"https://api.pwnedpasswords.com/range/{prefix}"
     response = requests.get(url)
 
     if response.status_code !=200:
@@ -41,6 +41,8 @@ def check_password_pwned(password):
         hash_suffix, count = line.split(':')
         if suffix == hash_suffix:
             return int(count)
+        
+    return 0 # Password not found in the database.
 
 
 
@@ -55,3 +57,10 @@ if breaches > 0:
     print(f"Warning: the generated password has been found in {breaches} please use another password.")
 else:
     print(f"This password is unique and can be used safely.")
+
+
+#Things to do
+
+# Create stored passwords like a mini password manager
+#Create an input from user about there password to the query the API to see if its compromised
+#Emails and utilizes that aspect of api to query if has appeard in any breach.
