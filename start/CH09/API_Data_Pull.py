@@ -23,6 +23,7 @@ def generate_password(length=12, use_upper=True, use_lower=True, use_digits=True
     return ''.join(secrets.choice(characters) for _ in range (length))
 
 # Function that generates the password in with hyphens because I like that format
+
 def generate_password_with_hyphens(length=12, use_upper=True, use_lower=True, use_digits=True, use_special=True):
     password = generate_password(length, use_upper, use_lower, use_digits, use_special)
     password_with_hyphens = '-'.join(password[i:i+4] for i in range(0, len(password), 4))
